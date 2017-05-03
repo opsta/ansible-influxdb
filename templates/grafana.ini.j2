@@ -1,0 +1,10 @@
+# {{ ansible managed }}
+
+{% for tag, configs in grafana_config.items() %}
+
+[{{ tag }}]
+{% for key, value in configs.items() %}
+{{ key }} = {{ value }}
+{% endfor %}
+
+{% endfor %}
