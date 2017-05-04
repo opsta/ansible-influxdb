@@ -1,5 +1,5 @@
 ---
-- name: Restart {{ grafana_service_name }} service
+- name: Restart Grafana Server Service
   service:
     name: "{{ grafana_service_name }}"
     state: restarted

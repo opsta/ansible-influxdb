@@ -1,0 +1,9 @@
+---
+- name: Install grafana packages
+  apt:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "{{ grafana_apt_package }}"
+    - "{{ grafana_apt_dependencies }}"

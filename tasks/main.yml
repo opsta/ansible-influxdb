@@ -2,65 +2,15 @@
 - name: Include OS family specific variables
   include_vars: "{{ ansible_os_family }}.yml"
 
-- name: Add {{ grafana_package }} repository key
-  apt_key:
-    url: https://packagecloud.io/gpg.key
-    id: C2E73424D59097AB
+- include: grafana_pre.yml
+- include: grafana_install.yml
 
-- name: Add {{ grafana_package }} apt-repository
-  apt_repository:
-    repo: "deb https://packagecloud.io/grafana/stable/debian/ jessie main"
+- include: grafana_post.yml
+  tags:
+    - configuration
+    - drop-config
 
-- name: Install {{ item }} packages
-  apt:
-    name: {{ item }}
-    state: present
-    update_cache: yes
-  with_items:
-    - {{ grafana_apt_package }}
-    - {{ grafana_apt_dependencies }}
-
-- name: Ensure {{ item }} directory
-  file:
-    path: "{{ item }}"
-    owner: "{{ grafana_user }}"
-    group: "{{ grafana_group }}"
-    mode: 0755
-    state: directory
-  with_items:
-    - "{{ grafana_dir_home }}"
-    - "{{ grafana_dir_log }}"
-    - "{{ grafana_dir_data }}"
-    - "{{ grafana_dir_config }}"
-    - "{{ grafana_dir_plugins }}"
-
-
-- block: # Drop configuration templates
-  - name: Drop grafana server configuration
-    template:
-      src: grafana-server.j2
-      dest: "{{ grafana_environment_filepath }}"
-      owner: "{{ grafana_user }}"
-      group: "{{ grafana_group }}"
-      mode: 0644
-    notify: Restart grafana-server service
-
-  - name: Drop grafana ini configuration
-    template:
-      src: grafana.ini.j2
-      dest: "{{ grafana_config_filepath }}"
-      owner: "{{ grafana_user }}"
-      group: "{{ grafana_group }}"
-      mode: 0644
-    with_dicts: "{{ grafana_config }}"
-    notify: Restart grafana-server service
-
-  - meta: flush_handlers
-
-
-- name: Ensure {{ grafana_service_name }} service started and start up at boot
-  service:
-    name: "{{ grafana_service_name }}"
-    state: started
-    enabled: yes
-    daemon_reload: yes
+- include: grafana_database.yml
+  tags:
+    - database
+    - create-database
