@@ -1,16 +1,24 @@
 ---
 - name: Include OS family specific variables
-  include_vars: "{{ ansible_os_family }}.yml"
+  include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_os_family }}.yml"
+    - default.yml
 
-- include: grafana_pre.yml
-- include: grafana_install.yml
+- include: influxdb_pre.yml
+- include: influxdb_install.yml
 
-- include: grafana_post.yml
+- include: influxdb_post.yml
   tags:
     - configuration
     - drop-config
 
-- include: grafana_database.yml
+- include: influxdb_credential.yml
+  tags:
+    - credential
+    - user
+
+- include: influxdb_database.yml
   tags:
     - database
     - create-database

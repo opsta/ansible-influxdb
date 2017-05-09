@@ -1,4 +1,4 @@
-# Ansible Role: NTP
+# Ansible Role: influxdb
 
 
 
@@ -18,7 +18,7 @@ None.
 
     - hosts: all
       roles:
-        - ansible-grafana
+        - ansible-influxdb
 
 
 ## License

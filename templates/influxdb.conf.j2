@@ -1,0 +1,73 @@
+# {{ ansible_managed }}
+
+{# Global config #}
+{% for key, value in global.items() %}
+{# Start IF #}
+{% if value is not mapping %}
+{% if value is sequence and value is not string %}
+{% if value[0] is number %}
+{{ key | replace('_', '-') }} = [ {{ value|join(', ') }} ]
+{% else %}
+{{ key | replace('_', '-') }} = [ "{{ value|join('", "') }}" ]
+{% endif %}
+{% else %}
+{% if value == "true" or value == "false" or value is number %}
+{{ key | replace('_', '-') }} = {{ value | lower }}
+{% else %}
+{{ key | replace('_', '-') }} = "{{ value }}"
+{% endif %}
+{% endif %}
+{% endif %}
+{# End IF #}
+{% endfor %}
+
+{# Tags config #}
+{% for tag, configs in influxdb_config.items() %}
+{% if tag not in ['listeners'] %}
+[{{ tag }}]
+{% for key, value in configs.items() %}
+{# Start IF #}
+{% if value is not mapping %}
+{% if value is sequence and value is not string %}
+{% if value[0] is number %}
+  {{ key | replace('_', '-') }} = [ {{ value|join(', ') }} ]
+{% else %}
+  {{ key | replace('_', '-') }} = [ "{{ value|join('", "') }}" ]
+{% endif %}
+{% else %}
+{% if value == "true" or value == "false" or value is number %}
+  {{ key | replace('_', '-') }} = {{ value | lower }}
+{% else %}
+  {{ key | replace('_', '-') }} = "{{ value }}"
+{% endif %}
+{% endif %}
+{% endif %}
+{# End IF #}
+{% endfor %}
+
+{% else %}
+{% for tag , listener in influxdb_config.listeners.items() %}
+[[{{ tag }}]]
+{% for key, value in listener.items() %}
+{# START variables condition #}
+{% if value is not mapping %} {# start of mapping condition (1) #}
+{% if value is sequence and value is not string %} {# start of sequence condition (2) #}
+{% if value[0] is number %} {# start of sequence number condition (3) #}
+  {{ key | replace('_', '-') }} = [ {{ value|join(', ') }} ]
+{% else %}
+  {{ key | replace('_', '-') }} = [ "{{ value|join('", "') }}" ]
+{% endif %} {# end of sequence number condition (3) #}
+{% else %} {# not sequence condition (--2--) #}
+{% if value == "true" or value == "false" or value is number %} {# start of boolean or number condition (3) #}
+  {{ key | replace('_', '-') }} = {{ value | lower }}
+{% else %}
+  {{ key | replace('_', '-') }} = "{{ value }}"
+{% endif %} {# end of boolean or number condition (3) #}
+{% endif %} {# end of sequence condition (2) #}
+{% endif %} {# end of mapping condition (1) #}
+{# END variables condition #}
+{% endfor %}
+
+{% endfor %}
+{% endif %}
+{% endfor %}

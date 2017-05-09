@@ -1,5 +1,4 @@
 ---
-grafana_apt_package: grafana
+influxdb_apt_package: influxdb
 
-grafana_apt_dependencies:
-  - apt-transport-https
+# influxdb_apt_dependencies: {}

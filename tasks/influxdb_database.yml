@@ -1,0 +1,9 @@
+---
+- name: Create database
+  influxdb_database:
+    hostname: "{{ influxdb_config.http.bind_address.split(':')[0] | default('localhost') }}"
+    database_name: "{{ item }}"
+    state: present
+  with_items: >
+    {{ influxdb_databases }}
+  ignore_errors: yes

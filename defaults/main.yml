@@ -1,79 +1,83 @@
 ---
-grafana_service_name: grafana-server
+influxdb_service_name: influxdb
 
 # Package variables
-grafana_apt_key_url: https://packagecloud.io/gpg.key
-grafana_apt_key_id: C2E73424D59097AB
-grafana_apt_repo: deb https://packagecloud.io/grafana/stable/debian/ jessie main
+influxdb_apt_key_url: https://repos.influxdata.com/influxdb.key
+influxdb_apt_repo: "deb https://repos.influxdata.com/{{ ansible_lsb.id|lower }} {{ ansible_lsb.codename|lower }} stable"
 
 # General variables
-grafana_user: grafana
-grafana_group: grafana
-grafana_dir_home: /usr/share/grafana
-grafana_dir_log: /var/log/grafana
-grafana_dir_data: /var/lib/grafana
-grafana_dir_config: /etc/grafana
-grafana_dir_plugins: /var/lib/grafana/plugins
-grafana_dir_default: /etc/default
-grafana_environment_filepath: "{{ grafana_dir_default }}/grafana-server"
-grafana_config_filepath: "{{ grafana_dir_config }}/grafana.ini"
-grafana_max_open_files: 10000
-grafana_restart_on_upgrade: 'true'
+influxdb_config_path: /etc/influxdb
+influxdb_config_filename: influxdb.conf
+influxdb_config_filepath: "{{ influxdb_config_path }}/{{ influxdb_config_filename }}"
 
-# MySQL credential
-# If database have not privileges, empty dict
-#grafana_privileges_credential: {}
-#
-grafana_privileges_credential:
-  database:
-    priv_user: root
-    priv_password: CHANGEME
-    priv_host:
-      - '%'
-      - localhost
-grafana_database_config:
-  database:
-    type: mysql # Either "mysql", "postgres" or "sqlite3", it's your choice
-    host: 127.0.0.1:3306
-    name: grafana
-    user: grafana
-    password: CHANGEME # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+# Database management
+influxdb_databases:
+  - telegraf
+  - grafana
 
+# User management
+influxdb_credentials_admin:
+  admin:one:
+    username: admin
+    password: opstathailand
+    database: []
+  admin:two:
+    username: teng
+    password: opstathailand
 
-# possible values : production, development
-app_mode: production
-# instance name, defaults to HOSTNAME environment variable value or hostname if HOSTNAME var is empty
-instance_name: "{{ ansible_hostname }}"
+influxdb_credentials_user:
+  user:one:
+    username: telegraf
+    password: opstathailand
+    database:
+      - all.telegraf # [ALL,READ,WRITE].[database]
+
 
 # Configuration
-#   default config see more (https://raw.githubusercontent.com/grafana/grafana/master/conf/defaults.ini)
+#   default config see more
+#   https://github.com/influxdata/influxdb/blob/v1.2.2/etc/config.sample.toml
 # FYI
-# grafana_config:
+# influxdb_config:
 #   <tag>:
 #     <key>: <value>
 #
-grafana_config:
-  paths:
-    data: "{{ grafana_dir_data }}"
-    logs: "{{ grafana_dir_log }}"
-    plugins: "{{ grafana_dir_plugins }}"
+global:
+  reporting-disabled: false
+  bind-address: ":8088"
 
-  server:
-    protocol: http # http, https, socket
-    http_port: 3000
-    domain: mon-grafana.lab.opsta.io
-    cert_file: ''
-    cert_key: ''
+influxdb_config:
+  meta:
+    dir: "/var/lib/influxdb/meta"
 
-  database: # Set at grafana_database_config
-    "{{ grafana_database_config.database }}"
+  data:
+    dir: "/var/lib/influxdb/data"
+    wal-dir: "/var/lib/influxdb/wal"
 
-  analytics:
-    check_for_updates: 'true'
+  http:
+    enabled: true
+    bind_address: ":8086"
+    auth_enabled: true
+    log_enabled: true
+    https_certificate: ""
+    https_private_key: ""
 
-  security:
-    admin_user: admin
-    admin_password: admin
+  admin:
+    enabled: true
+    bind_address: ":8083"
+    https_enabled: false
+    https_certificate: ""
 
-  users:
-    allow_sign_up: 'true'
+  coordinator: {}
+  retention: {}
+  shard_precreation: {}
+  monitor: {}
+
+  subscriber: {}
+  continuous_queries:
+    enabled: true
+    log_enabled: true
+  listeners:
+    graphite: {}
+    collectd: {}
+    opentsdb: {}
+    udp: {}

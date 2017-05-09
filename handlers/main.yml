@@ -1,5 +1,5 @@
 ---
-- name: Restart Grafana Server Service
+- name: Restart influxdb
   service:
-    name: "{{ grafana_service_name }}"
+    name: "{{ influxdb_service_name }}"
     state: restarted

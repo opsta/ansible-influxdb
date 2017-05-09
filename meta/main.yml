@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: overskylab
-  description: Ansible role to install and config grafana
+  description: Ansible role to install and config influxdb
   company: "Opsta (Thailand) Co., Tld."
   license: "MIT"
   min_ansible_version: 2.2
@@ -11,6 +11,6 @@ galaxy_info:
     - trusty
     - xenial
   galaxy_tags:
-    - grafana
-    - monitoring
+    - influxdb
+    - database
 dependencies: []

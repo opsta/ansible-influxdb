@@ -1,0 +1,9 @@
+---
+- name: Drop influxdb configuration
+  template:
+    src: influxdb.conf.j2
+    dest: "{{ influxdb_config_filepath }}"
+  notify:
+    - Restart influxdb
+
+- meta: flush_handlers
