@@ -7,7 +7,8 @@
       owner: "{{ grafana_user }}"
       group: "{{ grafana_group }}"
       mode: 0644
-    notify: Restart Grafana Server Service
+    notify:
+      - Restart grafana server
 
   - name: Drop grafana ini configuration
     template:
@@ -16,14 +17,7 @@
       owner: "{{ grafana_user }}"
       group: "{{ grafana_group }}"
       mode: 0644
-    notify: Restart Grafana Server Service
+    notify:
+      - Restart grafana server
 
   - meta: flush_handlers
-
-
-- name: Ensure {{ grafana_service_name }} service started and start up at boot
-  service:
-    name: "{{ grafana_service_name }}"
-    state: started
-    enabled: yes
-    daemon_reload: yes

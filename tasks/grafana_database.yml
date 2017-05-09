@@ -8,7 +8,8 @@
     state: present
   when:
     - grafana_privileges_credential is defined
-  with_dict: "{{ grafana_database_config | combine(grafana_privileges_credential|default({}), recursive=True) }}"
+  with_dict: >
+    {{ grafana_database_config | combine(grafana_privileges_credential|default({}), recursive=True) }}
 
 - name: Grant access to the DB
   mysql_user:

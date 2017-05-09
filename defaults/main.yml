@@ -22,22 +22,28 @@ grafana_restart_on_upgrade: 'true'
 
 # MySQL credential
 # If database have not privileges, empty dict
-#grafana_privileges_credential: {}
 #
-grafana_privileges_credential:
-  database:
-    priv_user: root
-    priv_password: CHANGEME
-    priv_host:
-      - '%'
-      - localhost
+grafana_privileges_credential: {}
+#
+# grafana_privileges_credential:
+#   database:
+#     priv_user: root
+#     priv_password: CHANGEME
+#     priv_host:
+#       - '%'
+#       - localhost
+#
 grafana_database_config:
   database:
-    type: mysql # Either "mysql", "postgres" or "sqlite3", it's your choice
-    host: 127.0.0.1:3306
-    name: grafana
-    user: grafana
-    password: CHANGEME # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+    type: "sqlite3"
+#
+# grafana_database_config:
+#   database:
+#     type: mysql # Either "mysql", "postgres" or "sqlite3", it's your choice
+#     host: 127.0.0.1:3306
+#     name: grafana
+#     user: grafana
+#     password: CHANGEME # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
 
 
 # possible values : production, development
