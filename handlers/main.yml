@@ -3,3 +3,10 @@
   service:
     name: "{{ influxdb_service_name }}"
     state: restarted
+  notify: Wait for InfluxDB to start
+
+- name: Wait for InfluxDB to start
+  wait_for:
+    port: 8086
+    delay: 1
+    timeout: 10

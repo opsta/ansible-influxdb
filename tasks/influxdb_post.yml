@@ -1,8 +1,19 @@
 ---
-- name: Drop influxdb configuration
+- name: Copy InfluxDB configuration file if host has it
+  template:
+    src: "{{ influxdb_host_config_file_path }}"
+    dest: "{{ influxdb_config_file_path }}"
+    owner: root
+    group: root
+    mode: 0644
+  when: influxdb_config_check.stat.exists
+  notify: Restart influxdb
+
+- name: Generate influxdb configuration in case of host doesn't have config file
   template:
     src: influxdb.conf.j2
-    dest: "{{ influxdb_config_filepath }}"
+    dest: "{{ influxdb_config_file_path }}"
+  when: not influxdb_config_check.stat.exists
   notify:
     - Restart influxdb
 

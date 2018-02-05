@@ -7,31 +7,31 @@ influxdb_apt_repo: "deb https://repos.influxdata.com/{{ ansible_lsb.id|lower }} 
 
 # General variables
 influxdb_config_path: /etc/influxdb
-influxdb_config_filename: influxdb.conf
-influxdb_config_filepath: "{{ influxdb_config_path }}/{{ influxdb_config_filename }}"
+influxdb_config_file_name: influxdb.conf
+influxdb_config_file_path: "{{ influxdb_config_path }}/{{ influxdb_config_file_name }}"
 
 # Database management
 influxdb_databases:
-  - telegraf
-  - grafana
+  - database1
+  - database2
 
 # User management
 influxdb_credentials_admin:
-  admin:one:
-    username: admin
-    password: opstathailand
-    database: []
-  admin:two:
-    username: teng
-    password: opstathailand
+  -  username: admin1
+     password: CHANGEME
+  -  username: admin2
+     password: CHANGEME
 
 influxdb_credentials_user:
-  user:one:
-    username: telegraf
-    password: opstathailand
+  - username: user1
+    password: CHANGEME
     database:
-      - all.telegraf # [ALL,READ,WRITE].[database]
-
+      - all.database1 # [ALL,READ,WRITE].[database]
+      - all.database2
+  - username: user2
+    password: CHANGEME
+    database:
+      - all.database1 # [ALL,READ,WRITE].[database]
 
 # Configuration
 #   default config see more
@@ -55,17 +55,12 @@ influxdb_config:
 
   http:
     enabled: true
+    https-enabled: true
+    https-certificate: <bundled-certificate-file>.pem
+    https-private-key: <bundled-certificate-file>.pem
     bind_address: ":8086"
     auth_enabled: true
     log_enabled: true
-    https_certificate: ""
-    https_private_key: ""
-
-  admin:
-    enabled: true
-    bind_address: ":8083"
-    https_enabled: false
-    https_certificate: ""
 
   coordinator: {}
   retention: {}
@@ -81,3 +76,8 @@ influxdb_config:
     collectd: {}
     opentsdb: {}
     udp: {}
+
+influxdb_search_config_path: "{{ playbook_dir }}/files/groups/{{ item }}/influxdb"
+influxdb_search_config_paths: []
+
+influxdb_host_config_file_path: "{{ influxdb_host_config_path | default(inventory_hostname) }}/influxdb.conf.j2"
