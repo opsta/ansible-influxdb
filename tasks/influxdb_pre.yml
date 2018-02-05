@@ -6,3 +6,9 @@
 - name: Add influxdb apt-repository
   apt_repository:
     repo: "{{ influxdb_apt_repo }}"
+
+- name: Install required python influxdb library
+  apt:
+    name: python-influxdb
+    state: present
+    update_cache: yes

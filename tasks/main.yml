@@ -3,22 +3,23 @@
   include_vars: "{{ item }}"
   with_first_found:
     - "{{ ansible_os_family }}.yml"
-    - default.yml
 
-- include: influxdb_pre.yml
-- include: influxdb_install.yml
+- include_tasks: influxdb_pre.yml
+- include_tasks: influxdb_install.yml
 
-- include: influxdb_post.yml
+- block: # Config InfluxDB
+  - include_tasks: influxdb_search_config.yml
+  - include_tasks: influxdb_post.yml
   tags:
-    - configuration
-    - drop-config
+    - influxdb-config
+    - influxdb-drop-config
 
-- include: influxdb_credential.yml
+- include_tasks: influxdb_database.yml
   tags:
-    - credential
-    - user
+    - influxdb-config
+    - influxdb-database
 
-- include: influxdb_database.yml
+- include_tasks: influxdb_credential.yml
   tags:
-    - database
-    - create-database
+    - influxdb-config
+    - influxdb-user

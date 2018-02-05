@@ -1,0 +1,20 @@
+---
+- name: Revert change auth-enabled
+  ini_file:
+    path: "{{ influxdb_config_file_path }}"
+    section: http
+    option: auth-enabled
+    value: "true"
+  when: influxdb_change_auth.changed
+  notify: Restart influxdb
+
+- name: Revert change https-enabled
+  ini_file:
+    path: "{{ influxdb_config_file_path }}"
+    section: http
+    option: https-enabled
+    value: "true"
+  when: influxdb_change_https.changed
+  notify: Restart influxdb
+
+- meta: flush_handlers

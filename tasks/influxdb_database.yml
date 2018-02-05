@@ -1,9 +1,11 @@
 ---
+- include_tasks: influxdb_auth_remove.yml
+
 - name: Create database
   influxdb_database:
-    hostname: "{{ influxdb_config.http.bind_address.split(':')[0] | default('localhost') }}"
+    hostname: localhost
     database_name: "{{ item }}"
     state: present
-  with_items: >
-    {{ influxdb_databases }}
-  ignore_errors: yes
+  with_items: "{{ influxdb_databases }}"
+
+- include_tasks: influxdb_auth_revert.yml

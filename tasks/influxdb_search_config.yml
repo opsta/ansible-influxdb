@@ -1,0 +1,30 @@
+---
+- name: Set list of path to look for local InfluxDB configuration directory
+  set_fact:
+    influxdb_search_config_paths: "{{ influxdb_search_config_paths }} + [ '{{ influxdb_search_config_path }}' ]"
+  with_items: "{{ group_names }}"
+
+- name: Check if InfluxDB configuration directory exists
+  stat:
+    path: "{{ item }}"
+  register: influxdb_config_check
+  become: false
+  delegate_to: 127.0.0.1
+  with_first_found:
+    - files: "{{ influxdb_search_config_paths }}"
+      skip: true
+
+- name: Set InfluxDB configuration directory
+  set_fact:
+    influxdb_host_config_path: "{{ influxdb_config_check.results[0].stat.path }}"
+  when:
+    - influxdb_config_check.results[0] is defined
+    - influxdb_config_check.results[0].stat is defined
+    - influxdb_config_check.results[0].stat.isdir
+
+- name: Check if InfluxDB template configuration file is exists
+  stat:
+    path: "{{ influxdb_host_config_file_path }}"
+  become: false
+  delegate_to: 127.0.0.1
+  register: influxdb_config_check
