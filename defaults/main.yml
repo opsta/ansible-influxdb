@@ -156,13 +156,13 @@ influxdb_config:
   ###
   http:
     ## Determines whether HTTP endpoint is enabled.
-    # enabled: true
+    enabled: true
 
     ## The bind address used by the HTTP service.
-    # bind-address: ":8086"
+    bind-address: ":8086"
 
     ## Determines whether user authentication is enabled over HTTP/HTTPS.
-    # auth-enabled: false
+    auth-enabled: false
 
     ## The default realm sent back when issuing a basic auth challenge.
     # realm: "InfluxDB"
@@ -189,7 +189,7 @@ influxdb_config:
     # pprof-enabled: true
 
     ## Determines whether HTTPS is enabled.
-    # https-enabled: false
+    https-enabled: false
 
     ## The SSL certificate to use when HTTPS is enabled.
     # https-certificate: "/etc/ssl/influxdb.pem"

@@ -1,6 +1,5 @@
 ---
 - include_tasks: influxdb_auth_remove.yml
-  when: influxdb_config.http["https-enabled"] == true
 
 - name: Create database
   influxdb_database:
@@ -10,4 +9,3 @@
   with_items: "{{ influxdb_databases }}"
 
 - include_tasks: influxdb_auth_revert.yml
-  when: influxdb_config.http["https-enabled"] == true
