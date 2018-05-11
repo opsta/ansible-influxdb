@@ -1,11 +1,12 @@
 ---
-- name: Change auth_enabled to false
+- name: Change auth-enabled to false
   ini_file:
     path: "{{ influxdb_config_file_path }}"
     section: http
     option: auth-enabled
     value: "false"
   register: influxdb_change_auth
+  when: influxdb_config.http["auth-enabled"] == true
   notify: Restart influxdb
 
 - name: Change https-enabled to false
@@ -15,6 +16,7 @@
     option: https-enabled
     value: "false"
   register: influxdb_change_https
+  when: influxdb_config.http["https-enabled"] == true
   notify: Restart influxdb
 
 - meta: flush_handlers
