@@ -14,7 +14,6 @@
     src: influxdb.conf.j2
     dest: "{{ influxdb_config_file_path }}"
   when: not influxdb_config_check.stat.exists
-  notify:
-    - Restart influxdb
+  notify: Restart influxdb
 
 - meta: flush_handlers
