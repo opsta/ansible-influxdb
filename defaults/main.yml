@@ -382,7 +382,7 @@ influxdb_config:
     
 
   listeners:
-    graphite: 
+    graphite: {}
       ## Determines whether the graphite endpoint is enabled.
       # enabled: false
       # database: "graphite"
