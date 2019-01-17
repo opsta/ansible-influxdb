@@ -28,3 +28,10 @@
   become: false
   delegate_to: 127.0.0.1
   register: influxdb_config_check
+
+- name: Check if InfluxDB ssl directory is exists
+  stat:
+    path: "{{ influxdb_host_config_ssl_path }}"
+  become: false
+  delegate_to: 127.0.0.1
+  register: influxdb_config_ssl_check

@@ -1,6 +1,6 @@
 ---
 galaxy_info:
-  author: overskylab
+  author: Teerawat Namsricharoensuk
   description: Ansible role to install and config influxdb
   company: "Opsta (Thailand) Co., Tld."
   license: "MIT"
