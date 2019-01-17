@@ -1,11 +1,9 @@
 ---
 - name: Install influxdb packages
   apt:
-    name: "{{ item }}"
+    name: "{{ influxdb_apt_package }}"
     state: present
     update_cache: yes
-  with_items:
-    - "{{ influxdb_apt_package }}"
 
 - name: Ensure {{ influxdb_service_name }} service started and start up at boot
   service:
