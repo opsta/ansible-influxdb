@@ -6,7 +6,7 @@
     option: auth-enabled
     value: "false"
   register: influxdb_change_auth
-  when: influxdb_config.http["auth-enabled"] == true
+  when: influxdb_config.http.auth_enabled
   notify: Restart influxdb
 
 - name: Change https-enabled to false
@@ -16,7 +16,7 @@
     option: https-enabled
     value: "false"
   register: influxdb_change_https
-  when: influxdb_config.http["https-enabled"] == true
+  when: influxdb_config.http.https_enabled
   notify: Restart influxdb
 
 - meta: flush_handlers

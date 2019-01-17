@@ -7,7 +7,7 @@
     value: "true"
   when: 
     - influxdb_change_auth.changed
-    - influxdb_config.http["auth-enabled"] == true
+    - influxdb_config.http.auth_enabled
   notify: Restart influxdb
 
 - name: Revert change https-enabled
@@ -18,7 +18,7 @@
     value: "true"
   when: 
     - influxdb_change_https.changed
-    - influxdb_config.http["https-enabled"] == true
+    - influxdb_config.http.https_enabled
   notify: Restart influxdb
 
 - meta: flush_handlers
