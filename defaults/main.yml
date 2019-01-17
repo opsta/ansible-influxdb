@@ -4,6 +4,7 @@ influxdb_service_name: influxdb
 influxdb_search_config_path: "{{ playbook_dir }}/files/groups/{{ item }}/influxdb"
 influxdb_search_config_paths: []
 influxdb_host_config_file_path: "{{ influxdb_host_config_path | default(inventory_hostname) }}/influxdb.conf.j2"
+influxdb_host_config_ssl_path:  "{{ influxdb_host_config_path | default(inventory_hostname) }}/ssl"
 
 # Package variables
 influxdb_apt_key_url: https://repos.influxdata.com/influxdb.key
@@ -506,4 +507,3 @@ influxdb_config:
 
       ## UDP Read buffer size, 0 means OS default. UDP listener will fail if set above OS max.
       # read-buffer: 0
-

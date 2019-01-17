@@ -9,6 +9,16 @@
   when: influxdb_config_check.stat.exists
   notify: Restart influxdb
 
+- name: Copy SSL certificates directory
+  copy:
+    src: "{{ influxdb_host_config_ssl_path }}"
+    dest: "{{ influxdb_config_path }}/"
+  when:
+    - influxdb_config_ssl_check.stat.isdir is defined
+    - influxdb_config_ssl_check.stat.isdir
+    - influxdb_config.http.https_enabled
+  notify: Restart influxdb
+
 - name: Generate influxdb configuration in case of host doesn't have config file
   template:
     src: influxdb.conf.j2
