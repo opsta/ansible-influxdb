@@ -9,6 +9,6 @@
 
 - name: Install required python influxdb library
   apt:
-    name: python-influxdb
+    name: python3-influxdb
     state: present
     update_cache: yes
